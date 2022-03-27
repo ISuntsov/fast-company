@@ -4,66 +4,63 @@ import api from '../api'
 const Users = () => {
     const [users, setUsers] = useState(api.users.fetchAll())
     
-     const handleDelete = (userId) => {
+    const handleDelete = (userId) => {
         setUsers(prevState => prevState.filter(user => user._id !== userId))
     }
     
-    const renderMessage = (number) => {
-        let message = ''
+    const renderPhrase = (number) => {
+        let phrase
         let classes = "badge m-2 bg-primary"
         switch (number) {
             case 0:
-                message = 'Никто с тобой не тусанет';
+                phrase = 'Никто с тобой не тусанет';
                 classes = "badge m-2 bg-danger";
                 break;
             case 2:
             case 3:
             case 4:
-                message = number + ' человека тусанет с тобой сегодня';
+                phrase = number + ' человека тусанут с тобой сегодня';
                 break;
             default:
-                message = number + ' человек тусанет с тобой сегодня';
+                phrase = number + ' человек тусанет с тобой сегодня';
                 break;
         }
         
         return (
             <h3 className="text-center">
                 <span className={classes}>
-                {message}
+                {phrase}
                 </span>
             </h3>)
     }
     
-    const renderLine = (user) => {
-        let classes = "badge m-2 bg-"
-        return (
-            <tr key={user._id}>
-                <th>{user.name}</th>
-                <td>
-                    {user.qualities.map(quality => {
-                        return (<span
-                            key={quality._id}
-                            className={classes + quality.color}>
+    const renderUserTableLine = () => {
+        return users.length !== 0 && users.map((user) => {
+            let classes = "badge m-2 bg-"
+            return (
+                <tr key={user._id}>
+                    <th>{user.name}</th>
+                    <td>
+                        {user.qualities.map(quality => {
+                            return (<span
+                                key={quality._id}
+                                className={classes + quality.color}>
                                 {quality.name}
                             </span>)
-                    })}
-                </td>
-                <th>{user.profession.name}</th>
-                <th>{user.completedMeetings}</th>
-                <th>{user.rate}/5</th>
-                <th>
-                    <button
-                        className='btn btn-danger btn-sm m-2'
-                        onClick={() => handleDelete(user._id)}>
-                        Удалить
-                    </button>
-                </th>
-            </tr>)
-    }
-    
-    const renderPhrase = () => {
-        return users.length !== 0 && users.map((user) => {
-            return renderLine(user)
+                        })}
+                    </td>
+                    <th>{user.profession.name}</th>
+                    <th>{user.completedMeetings}</th>
+                    <th>{user.rate}/5</th>
+                    <th>
+                        <button
+                            className='btn btn-danger btn-sm m-2'
+                            onClick={() => handleDelete(user._id)}>
+                            Удалить
+                        </button>
+                    </th>
+                </tr>
+            )
         })
     }
     
@@ -81,7 +78,7 @@ const Users = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {renderPhrase()}
+                {renderUserTableLine()}
                 </tbody>
             </table>)
     }
@@ -89,13 +86,13 @@ const Users = () => {
     if (users.length === 0) {
         return (
             <>
-                {renderMessage(users.length)}
+                {renderPhrase(users.length)}
             </>)
     }
     
     return (
         <>
-            {renderMessage(users.length)}
+            {renderPhrase(users.length)}
             {renderTable()}
         </>)
     
