@@ -11,19 +11,23 @@ const Users = () => {
     const renderPhrase = (number) => {
         let phrase
         let classes = "badge m-2 bg-primary"
-        switch (number) {
+        const lastDigitNumber = Number(number.toString().slice(-1))
+        switch (lastDigitNumber) {
             case 0:
-                phrase = 'Никто с тобой не тусанет';
-                classes = "badge m-2 bg-danger";
-                break;
+                if (number === 0) {
+                    phrase = 'Никто с тобой не тусанет'
+                    classes = "badge m-2 bg-danger"
+                } else
+                    phrase = number + ' человек тусанет с тобой сегодня'
+                break
             case 2:
             case 3:
             case 4:
-                phrase = number + ' человека тусанут с тобой сегодня';
-                break;
+                phrase = number + ' человека тусанут с тобой сегодня'
+                break
             default:
-                phrase = number + ' человек тусанет с тобой сегодня';
-                break;
+                phrase = number + ' человек тусанет с тобой сегодня'
+                break
         }
         
         return (
@@ -31,7 +35,8 @@ const Users = () => {
                 <span className={classes}>
                 {phrase}
                 </span>
-            </h3>)
+            </h3>
+        )
     }
     
     const renderUserTableLine = () => {
@@ -39,7 +44,7 @@ const Users = () => {
             let classes = "badge m-2 bg-"
             return (
                 <tr key={user._id}>
-                    <th>{user.name}</th>
+                    <td>{user.name}</td>
                     <td>
                         {user.qualities.map(quality => {
                             return (<span
@@ -49,16 +54,16 @@ const Users = () => {
                             </span>)
                         })}
                     </td>
-                    <th>{user.profession.name}</th>
-                    <th>{user.completedMeetings}</th>
-                    <th>{user.rate}/5</th>
-                    <th>
+                    <td>{user.profession.name}</td>
+                    <td>{user.completedMeetings}</td>
+                    <td>{user.rate}/5</td>
+                    <td>
                         <button
                             className='btn btn-danger btn-sm m-2'
                             onClick={() => handleDelete(user._id)}>
                             Удалить
                         </button>
-                    </th>
+                    </td>
                 </tr>
             )
         })
@@ -80,23 +85,16 @@ const Users = () => {
                 <tbody>
                 {renderUserTableLine()}
                 </tbody>
-            </table>)
-    }
-    
-    if (users.length === 0) {
-        return (
-            <>
-                {renderPhrase(users.length)}
-            </>)
+            </table>
+        )
     }
     
     return (
         <>
             {renderPhrase(users.length)}
-            {renderTable()}
-        </>)
-    
-    
-};
+            {users.length !== 0 && renderTable()}
+        </>
+    )
+}
 
-export default Users;
+export default Users
