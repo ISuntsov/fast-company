@@ -1,9 +1,7 @@
 import React from "react";
 import User from './user'
 
-const Users = (props) => {
-    const {users, onDelete, onToggleBookMark} = props
-    
+const Users = ({users, onDelete, onToggleBookMark}) => {
     return (
         <>
             {users.length !== 0 && (<table className="table table-striped table-hover">
@@ -14,17 +12,19 @@ const Users = (props) => {
                     <th>Профессия</th>
                     <th>Встретился, раз</th>
                     <th>Оценка</th>
+                    <th>Закладки</th>
                     <th>Кнопка</th>
                 </tr>
                 </thead>
                 <tbody>
                 {users.map((user) => {
-                    <User
-                        key={user._id}
-                        user={user}
-                        onDelete={onDelete}
-                        onToogleBookMark={onToggleBookMark}
-                    />
+                    return (
+                        <User
+                            key={user._id}
+                            onDelete={onDelete}
+                            onToggleBookMark={onToggleBookMark}
+                            user={user}
+                        />)
                 })}
                 </tbody>
             </table>)}
