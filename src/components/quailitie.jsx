@@ -1,12 +1,16 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const Quailitie = ({quailitie}) => {
+const Quailitie = ({ quailitie }) => {
     return (
         <span className={`badge ms-1 bg-${quailitie.color}`}>
             {quailitie.name}
         </span>
-    )
-}
+    );
+};
 
-export default Quailitie
+Quailitie.propTypes = {
+    quailitie: PropTypes.array.isRequired
+};
 
+export default Quailitie;
