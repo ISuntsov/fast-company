@@ -10,7 +10,7 @@ const Quailitie = ({ quailitie }) => {
 };
 
 Quailitie.propTypes = {
-    quailitie: PropTypes.array.isRequired
+    quailitie: PropTypes.object.isRequired
 };
 
 export default Quailitie;

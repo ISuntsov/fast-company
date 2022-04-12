@@ -44,8 +44,8 @@ const BookMark = ({ user, onToggleBookMark }) => {
 };
 
 BookMark.propTypes = {
-    user: PropTypes.object.isRequired,
-    onToggleBookMark: PropTypes.func.isRequired
+    user: PropTypes.object,
+    onToggleBookMark: PropTypes.func
 };
 
 export default BookMark;

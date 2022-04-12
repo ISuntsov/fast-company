@@ -4,7 +4,7 @@ import Pajination from './pajination';
 import { paginate } from '../utils/paginate';
 import PropTypes from 'prop-types';
 
-const Users = ({ users, onDelete, onToggleBookMark }) => {
+const Users = ({ users, ...rest }) => {
     const count = users.length;
     const pageSize = 4;
     const [currentPage, setCurrentPage] = useState(1);
@@ -35,9 +35,8 @@ const Users = ({ users, onDelete, onToggleBookMark }) => {
                             return (
                                 <User
                                     key={user._id}
-                                    onDelete={onDelete}
-                                    onToggleBookMark={onToggleBookMark}
                                     user={user}
+                                    {...rest}
                                 />
                             );
                         })}
@@ -55,7 +54,7 @@ const Users = ({ users, onDelete, onToggleBookMark }) => {
 };
 
 Users.propTypes = {
-    users: PropTypes.objectOf(
+    users: PropTypes.arrayOf(
         PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number,
