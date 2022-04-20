@@ -1,6 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const listItem = (itemElement, valueProperty, contentProperty, onItemSelect, selectedItem) => {
+    return (
+        <li
+            key={itemElement[valueProperty]}
+            className={
+                'list-group-item' +
+                (itemElement === selectedItem ? ' active' : '')
+            }
+            onClick={() => onItemSelect(itemElement)}
+            role={'button'}
+        >
+            {itemElement[contentProperty]}
+        </li>
+    );
+};
+
 const GroupList = ({
     items,
     valueProperty,
@@ -10,21 +26,9 @@ const GroupList = ({
 }) => {
     return (
         <ul className="list-group">
-            {Object.keys(items).map((item) => {
-                return (
-                    <li
-                        key={items[item][valueProperty]}
-                        className={
-                            'list-group-item' +
-                            (items[item] === selectedItem ? ' active' : '')
-                        }
-                        onClick={() => onItemSelect(items[item])}
-                        role={'button'}
-                    >
-                        {items[item][contentProperty]}
-                    </li>
-                );
-            })}
+            {Array.isArray(items)
+                ? items.map((item) => listItem(item, valueProperty, contentProperty, onItemSelect, selectedItem))
+                : Object.keys(items).map((item) => listItem(items[item], valueProperty, contentProperty, onItemSelect, selectedItem))}
         </ul>
     );
 };
