@@ -10,7 +10,7 @@ const User = ({ user, ...rest }) => {
             <td>
                 {user.qualities.map((quailitie) => {
                     return (
-                        <Quailitie key={quailitie._id} quailitie={quailitie}/>
+                        <Quailitie key={quailitie._id} quailitie={quailitie} />
                     );
                 })}
             </td>
@@ -18,7 +18,10 @@ const User = ({ user, ...rest }) => {
             <td>{user.completedMeetings}</td>
             <td>{user.rate}/5</td>
             <td>
-                <BookMark onToggleBookMark={rest.onToggleBookMark} user={user}/>
+                <BookMark
+                    onToggleBookMark={rest.onToggleBookMark}
+                    user={user}
+                />
             </td>
             <td>
                 <button
@@ -33,13 +36,15 @@ const User = ({ user, ...rest }) => {
 };
 
 User.propTypes = {
-    user: PropTypes.objectOf(PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-        PropTypes.bool,
-        PropTypes.object,
-        PropTypes.array
-    ])).isRequired
+    user: PropTypes.objectOf(
+        PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+            PropTypes.bool,
+            PropTypes.object,
+            PropTypes.array
+        ])
+    ).isRequired
 };
 
 export default User;
