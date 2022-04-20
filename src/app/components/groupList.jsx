@@ -1,21 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-const listItem = (itemElement, valueProperty, contentProperty, onItemSelect, selectedItem) => {
-    return (
-        <li
-            key={itemElement[valueProperty]}
-            className={
-                'list-group-item' +
-                (itemElement === selectedItem ? ' active' : '')
-            }
-            onClick={() => onItemSelect(itemElement)}
-            role={'button'}
-        >
-            {itemElement[contentProperty]}
-        </li>
-    );
-};
+import listItem from './itemGroupList';
 
 const GroupList = ({
     items,
