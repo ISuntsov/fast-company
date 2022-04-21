@@ -1,6 +1,12 @@
 import React from 'react';
 
-const listItem = (itemElement, valueProperty, contentProperty, onItemSelect, selectedItem) => {
+const listItem = ({
+    item: itemElement,
+    valueProperty,
+    contentProperty,
+    onItemSelect,
+    selectedItem
+}) => {
     return (
         <li
             key={itemElement[valueProperty]}
