@@ -10,7 +10,11 @@ const SearchStatus = ({ length }) => {
             phrase = 'Никто с тобой не тусанет';
             classes = 'badge m-2 bg-danger';
         } else phrase = length + ' человек тусанет с тобой сегодня';
-    } else if (lastDigitNumber === 2 || lastDigitNumber === 3 || lastDigitNumber === 4) {
+    } else if (
+        lastDigitNumber === 2 ||
+        lastDigitNumber === 3 ||
+        lastDigitNumber === 4
+    ) {
         phrase = length + ' человека тусанут с тобой сегодня';
     } else {
         phrase = length + ' человек тусанет с тобой сегодня';
