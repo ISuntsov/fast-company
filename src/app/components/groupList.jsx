@@ -1,33 +1,58 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import ListItem from './groupListItem';
+import React from "react";
+import PropTypes from "prop-types";
 
-const GroupList = ({ items, ...rest }) => {
-    const listItems = Array.isArray(items) ? items : Object.values(items);
+const GroupList = ({
+    items,
+    valueProperty,
+    contentProperty,
+    onItemSelect,
+    selectedItem
+}) => {
+    if (!Array.isArray(items)) {
+        return (
+            <ul className="list-group">
+                {Object.keys(items).map((item) => (
+                    <li
+                        key={items[item][valueProperty]}
+                        className={
+                            "list-group-item" +
+                            (items[item] === selectedItem ? " active" : "")
+                        }
+                        onClick={() => onItemSelect(items[item])}
+                        role="button"
+                    >
+                        {items[item][contentProperty]}
+                    </li>
+                ))}
+            </ul>
+        );
+    }
     return (
         <ul className="list-group">
-            {listItems.map((item) => {
-                return (
-                    <ListItem
-                        item={item}
-                        key={item[rest.valueProperty]}
-                        {...rest}
-                    />
-                );
-            })}
+            {items.map((item) => (
+                <li
+                    key={item[valueProperty]}
+                    className={
+                        "list-group-item" +
+                        (item === selectedItem ? " active" : "")
+                    }
+                    onClick={() => onItemSelect(item)}
+                    role="button"
+                >
+                    {item[contentProperty]}
+                </li>
+            ))}
         </ul>
     );
 };
-
 GroupList.defaultProps = {
-    valueProperty: '_id',
-    contentProperty: 'name'
+    valueProperty: "_id",
+    contentProperty: "name"
 };
-
 GroupList.propTypes = {
-    items: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
-    contentProperty: PropTypes.string.isRequired,
+    items: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     valueProperty: PropTypes.string.isRequired,
+    contentProperty: PropTypes.string.isRequired,
     onItemSelect: PropTypes.func,
     selectedItem: PropTypes.object
 };

@@ -1,50 +1,36 @@
-import React from 'react';
-import Quailitie from './quailitie';
-import BookMark from './bookmark';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import api from "../api";
+import QualitiesList from "./qualitiesList";
+import { useHistory } from "react-router-dom";
 
-const User = ({ user, ...rest }) => {
-    return (
-        <tr>
-            <td>{user.name}</td>
-            <td>
-                {user.qualities.map((quailitie) => {
-                    return (
-                        <Quailitie key={quailitie._id} quailitie={quailitie} />
-                    );
-                })}
-            </td>
-            <td>{user.profession.name}</td>
-            <td>{user.completedMeetings}</td>
-            <td>{user.rate}/5</td>
-            <td>
-                <BookMark
-                    onToggleBookMark={rest.onToggleBookMark}
-                    user={user}
-                />
-            </td>
-            <td>
-                <button
-                    className="btn btn-danger btn-sm ms-1"
-                    onClick={() => rest.onDelete(user._id)}
-                >
-                    Удалить
-                </button>
-            </td>
-        </tr>
-    );
+const UserPage = ({ userId }) => {
+    const history = useHistory();
+    const [user, setUser] = useState();
+    useEffect(() => {
+        api.users.getById(userId).then((data) => setUser(data));
+    });
+    const handleClick = () => {
+        history.push("/users");
+    };
+    if (user) {
+        return (
+            <div>
+                <h1> {user.name}</h1>
+                <h2>Профессия: {user.profession.name}</h2>
+                <QualitiesList qualities={user.qualities} />
+                <p>completedMeetings: {user.completedMeetings}</p>
+                <h2>Rate: {user.rate}</h2>
+                <button onClick={handleClick}> Все Пользователи</button>
+            </div>
+        );
+    } else {
+        return <h1>Loading</h1>;
+    }
 };
 
-User.propTypes = {
-    user: PropTypes.objectOf(
-        PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number,
-            PropTypes.bool,
-            PropTypes.object,
-            PropTypes.array
-        ])
-    ).isRequired
+UserPage.propTypes = {
+    userId: PropTypes.string.isRequired
 };
 
-export default User;
+export default UserPage;
