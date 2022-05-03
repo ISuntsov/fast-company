@@ -7,6 +7,8 @@ import GroupList from "./groupList";
 import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
 import _ from "lodash";
+import Loader from "../utils/loader/loader";
+
 const Users = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
@@ -107,7 +109,7 @@ const Users = () => {
             </div>
         );
     }
-    return "loading...";
+    return <Loader />;
 };
 Users.propTypes = {
     users: PropTypes.array
