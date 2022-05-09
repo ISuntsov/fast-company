@@ -8,11 +8,13 @@ import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
 import _ from "lodash";
 import Loader from "../utils/loader/loader";
+import Search from "./search";
 
 const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
+    const [searchData, setSearchData] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 8;
 
@@ -39,11 +41,7 @@ const UsersList = () => {
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedProf]);
-
-    const handleProfessionSelect = (item) => {
-        setSelectedProf(item);
-    };
+    }, [selectedProf, setSearchData]);
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
@@ -53,14 +51,21 @@ const UsersList = () => {
     };
 
     if (users) {
-        const filteredUsers = selectedProf
-            ? users.filter(
-                  (user) =>
-                      JSON.stringify(user.profession) ===
-                      JSON.stringify(selectedProf)
-              )
-            : users;
-
+        let filteredUsers;
+        if (selectedProf) {
+            filteredUsers = users.filter(
+                (user) =>
+                    JSON.stringify(user.profession) ===
+                    JSON.stringify(selectedProf)
+            );
+        } else if (searchData) {
+            filteredUsers = users.filter(
+                (user) => JSON.stringify(user.name).toLowerCase()
+                    .includes(searchData.toLowerCase())
+               );
+        } else {
+            filteredUsers = users;
+        };
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(
             filteredUsers,
@@ -70,8 +75,17 @@ const UsersList = () => {
         const usersCrop = paginate(sortedUsers, currentPage, pageSize);
         const clearFilter = () => {
             setSelectedProf();
+            setSearchData();
+            document.getElementById("search").value = null;
         };
-
+        const handleProfessionSelect = (item) => {
+            clearFilter();
+            setSelectedProf(item);
+        };
+        const handleSearch = (item) => {
+            setSelectedProf();
+            setSearchData(item.trim());
+        };
         return (
             <div className="d-flex">
                 {professions && (
@@ -85,21 +99,23 @@ const UsersList = () => {
                             className="btn btn-secondary mt-2"
                             onClick={clearFilter}
                         >
-                            {" "}
                             Очистить
                         </button>
                     </div>
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
+                    <Search onChange={handleSearch} />
                     {count > 0 && (
-                        <UserTable
-                            users={usersCrop}
-                            onSort={handleSort}
-                            selectedSort={sortBy}
-                            onDelete={handleDelete}
-                            onToggleBookMark={handleToggleBookMark}
-                        />
+                        <>
+                            <UserTable
+                                users={usersCrop}
+                                onSort={handleSort}
+                                selectedSort={sortBy}
+                                onDelete={handleDelete}
+                                onToggleBookMark={handleToggleBookMark}
+                            />
+                        </>
                     )}
                     <div className="d-flex justify-content-center">
                         <Pagination
