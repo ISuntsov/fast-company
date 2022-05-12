@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import api from "../api";
-import QualitiesList from "./qualitiesList";
-import { useHistory } from "react-router-dom";
-import Loader from "../utils/loader/loader";
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import api from '../../../api';
+import { useHistory } from 'react-router-dom';
+import Loader from '../../ui/loader/loader';
+import Qualities from '../../ui/qualities';
 
 const UserPage = ({ userId }) => {
     const history = useHistory();
@@ -11,10 +11,10 @@ const UserPage = ({ userId }) => {
 
     useEffect(() => {
         api.users.getById(userId).then((data) => setUser(data));
-    });
+    }, []);
 
     const handleClick = () => {
-        history.push("/users");
+        history.push('/users');
     };
 
     if (user) {
@@ -22,7 +22,7 @@ const UserPage = ({ userId }) => {
             <div>
                 <h1>{user.name}</h1>
                 <h2>Профессия: {user.profession.name}</h2>
-                <QualitiesList qualities={user.qualities} />
+                <Qualities qualities={user.qualities} />
                 <p>completedMeetings: {user.completedMeetings}</p>
                 <h2>Rate: {user.rate}/5</h2>
                 <button onClick={handleClick}> Все Пользователи</button>

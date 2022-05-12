@@ -1,30 +1,33 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { paginate } from "../utils/paginate";
-import Pagination from "./pagination";
-import api from "../api";
-import GroupList from "./groupList";
-import SearchStatus from "./searchStatus";
-import UserTable from "./usersTable";
-import _ from "lodash";
-import Loader from "../utils/loader/loader";
-import Search from "./search";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { paginate } from '../../../utils/paginate';
+import Pagination from '../../common/pagination';
+import api from '../../../api';
+import GroupList from '../../common/groupList';
+import SearchStatus from '../../ui/searchStatus';
+import UserTable from '../../ui/usersTable';
+import _ from 'lodash';
+import Loader from '../../ui/loader/loader';
+import Search from '../../search';
 
-const UsersList = () => {
+const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [searchData, setSearchData] = useState();
-    const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
     const pageSize = 8;
 
     const [users, setUsers] = useState();
+
     useEffect(() => {
         api.users.fetchAll().then((data) => setUsers(data));
     }, []);
+
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
+
     const handleToggleBookMark = (id) => {
         const newArray = users.map((user) => {
             if (user._id === id) {
@@ -59,13 +62,14 @@ const UsersList = () => {
                     JSON.stringify(selectedProf)
             );
         } else if (searchData) {
-            filteredUsers = users.filter(
-                (user) => JSON.stringify(user.name).toLowerCase()
+            filteredUsers = users.filter((user) =>
+                JSON.stringify(user.name)
+                    .toLowerCase()
                     .includes(searchData.toLowerCase())
-               );
+            );
         } else {
             filteredUsers = users;
-        };
+        }
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(
             filteredUsers,
@@ -76,7 +80,7 @@ const UsersList = () => {
         const clearFilter = () => {
             setSelectedProf();
             setSearchData();
-            document.getElementById("search").value = null;
+            document.getElementById('search').value = null;
         };
         const handleProfessionSelect = (item) => {
             clearFilter();
@@ -97,8 +101,7 @@ const UsersList = () => {
                         />
                         <button
                             className="btn btn-secondary mt-2"
-                            onClick={clearFilter}
-                        >
+                            onClick={clearFilter}>
                             Очистить
                         </button>
                     </div>
@@ -131,8 +134,8 @@ const UsersList = () => {
     }
     return <Loader />;
 };
-UsersList.propTypes = {
+UsersListPage.propTypes = {
     users: PropTypes.array
 };
 
-export default UsersList;
+export default UsersListPage;

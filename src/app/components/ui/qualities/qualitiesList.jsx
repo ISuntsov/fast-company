@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Quality from "./quality";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Quality from './quality';
 
 const QualitiesList = ({ qualities }) => {
     return (
