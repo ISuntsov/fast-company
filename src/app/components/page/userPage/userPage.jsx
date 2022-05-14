@@ -14,18 +14,22 @@ const UserPage = ({ userId }) => {
     }, []);
 
     const handleClick = () => {
-        history.push('/users');
+        history.push(history.location.pathname + '/edit');
     };
 
     if (user) {
         return (
-            <div>
-                <h1>{user.name}</h1>
-                <h2>Профессия: {user.profession.name}</h2>
-                <Qualities qualities={user.qualities} />
-                <p>completedMeetings: {user.completedMeetings}</p>
-                <h2>Rate: {user.rate}/5</h2>
-                <button onClick={handleClick}> Все Пользователи</button>
+            <div className="container m-5">
+                <div className="row">
+                    <div className="col-md-6 offset-md-3 shadow p-4">
+                        <h1>{user.name}</h1>
+                        <h2>Профессия: {user.profession.name}</h2>
+                        <Qualities qualities={user.qualities} />
+                        <p>completedMeetings: {user.completedMeetings}</p>
+                        <h2>Rate: {user.rate}/5</h2>
+                        <button onClick={handleClick}>Изменить данные</button>
+                    </div>
+                </div>
             </div>
         );
     } else {
