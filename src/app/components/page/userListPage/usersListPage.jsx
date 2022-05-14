@@ -8,13 +8,12 @@ import SearchStatus from '../../ui/searchStatus';
 import UserTable from '../../ui/usersTable';
 import _ from 'lodash';
 import Loader from '../../ui/loader/loader';
-import Search from '../../search';
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
-    const [searchData, setSearchData] = useState();
+    const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
     const pageSize = 8;
 
@@ -23,6 +22,14 @@ const UsersListPage = () => {
     useEffect(() => {
         api.users.fetchAll().then((data) => setUsers(data));
     }, []);
+
+    useEffect(() => {
+        api.professions.fetchAll().then((data) => setProfession(data));
+    }, []);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedProf, setSearchQuery]);
 
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
@@ -38,13 +45,14 @@ const UsersListPage = () => {
         setUsers(newArray);
     };
 
-    useEffect(() => {
-        api.professions.fetchAll().then((data) => setProfession(data));
-    }, []);
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [selectedProf, setSearchData]);
+    const handleProfessionSelect = (item) => {
+        setSearchQuery('');
+        setSelectedProf(item);
+    };
+    const handleSearchQuery = ({ target }) => {
+        setSelectedProf(undefined);
+        setSearchQuery(target.value.trim());
+    };
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
@@ -54,22 +62,21 @@ const UsersListPage = () => {
     };
 
     if (users) {
-        let filteredUsers;
-        if (selectedProf) {
-            filteredUsers = users.filter(
-                (user) =>
-                    JSON.stringify(user.profession) ===
-                    JSON.stringify(selectedProf)
-            );
-        } else if (searchData) {
-            filteredUsers = users.filter((user) =>
-                JSON.stringify(user.name)
-                    .toLowerCase()
-                    .includes(searchData.toLowerCase())
-            );
-        } else {
-            filteredUsers = users;
-        }
+        const filteredUsers = searchQuery
+            ? users.filter(
+                  (user) =>
+                      user.name
+                          .toLowerCase()
+                          .indexOf(searchQuery.toLowerCase()) !== -1
+              )
+            : selectedProf
+            ? users.filter(
+                  (user) =>
+                      JSON.stringify(user.profession) ===
+                      JSON.stringify(selectedProf)
+              )
+            : users;
+
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(
             filteredUsers,
@@ -79,17 +86,9 @@ const UsersListPage = () => {
         const usersCrop = paginate(sortedUsers, currentPage, pageSize);
         const clearFilter = () => {
             setSelectedProf();
-            setSearchData();
-            document.getElementById('search').value = null;
+            setSearchQuery('');
         };
-        const handleProfessionSelect = (item) => {
-            clearFilter();
-            setSelectedProf(item);
-        };
-        const handleSearch = (item) => {
-            setSelectedProf();
-            setSearchData(item.trim());
-        };
+
         return (
             <div className="d-flex">
                 {professions && (
@@ -108,7 +107,16 @@ const UsersListPage = () => {
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
-                    <Search onChange={handleSearch} />
+                    <input
+                        type="text"
+                        id="searchQuery"
+                        name="searchQuery"
+                        placeholder="Поиск..."
+                        className="form-control me-2"
+                        onChange={handleSearchQuery}
+                        value={searchQuery}
+                    />
+                    {/* <Search onChange={handleSearch} /> */}
                     {count > 0 && (
                         <>
                             <UserTable
