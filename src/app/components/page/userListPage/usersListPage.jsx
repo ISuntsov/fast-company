@@ -116,7 +116,6 @@ const UsersListPage = () => {
                         onChange={handleSearchQuery}
                         value={searchQuery}
                     />
-                    {/* <Search onChange={handleSearch} /> */}
                     {count > 0 && (
                         <>
                             <UserTable

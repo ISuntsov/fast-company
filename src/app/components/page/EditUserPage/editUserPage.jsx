@@ -8,6 +8,7 @@ import MultiSelectField from '../../common/form/multiSelectField';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Loader from '../../ui/loader/loader';
+import { color } from '../../../utils/color';
 
 const EditUserPage = ({ userId }) => {
     const currentUser = {
@@ -26,7 +27,7 @@ const EditUserPage = ({ userId }) => {
             return {
                 value: qualitie._id,
                 label: qualitie.name,
-                color: qualitie.color
+                color: color(qualitie.color)
             };
         })
     });
@@ -46,7 +47,7 @@ const EditUserPage = ({ userId }) => {
             const qualitiesList = Object.keys(data).map((optionName) => ({
                 value: data[optionName]._id,
                 label: data[optionName].name,
-                color: data[optionName].color
+                color: color(data[optionName].color)
             }));
             setQualities(qualitiesList);
         });
@@ -108,7 +109,7 @@ const EditUserPage = ({ userId }) => {
                     qualitiesArray.push({
                         _id: qualities[quality].value,
                         name: qualities[quality].label,
-                        color: qualities[quality].color
+                        color: color(qualities[quality].color)
                     });
                 }
             }
