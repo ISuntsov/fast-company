@@ -5,12 +5,12 @@ import RegisterForm from '../components/ui/registerForm';
 
 const Login = () => {
     const { type } = useParams();
-    const [formType, setFprmType] = useState(
+    const [formType, setFormType] = useState(
         type === 'register' ? type : 'login'
     );
 
     const toogleFormType = (params) => {
-        setFprmType((prevState) =>
+        setFormType((prevState) =>
             prevState === 'register' ? 'login' : 'register'
         );
     };

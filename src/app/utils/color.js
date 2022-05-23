@@ -17,7 +17,6 @@ export const colorsMatrix = [
 
 export const color = (color) => {
     const findIndex = color[0] === '#' ? 1 : 0;
-    console.log(findIndex, color);
     return colorsMatrix.find((colorRow) => colorRow[findIndex] === color)[
         color[0] === '#' ? 0 : 1
     ];

@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-// import chroma from 'chroma-js';
+import chroma from 'chroma-js';
 import PropTypes from 'prop-types';
 
 const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
@@ -15,54 +15,56 @@ const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
 
     const colourStyles = {
         option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-            // const color = chroma(data.color);
+            const color = chroma(data.color);
             return {
-                // backgroundColor: isDisabled
-                //     ? undefined
-                //     : isSelected
-                //     ? data.color
-                //     : isFocused
-                //     ? color.alpha(0.1).css()
-                //     : undefined,
-                color: isDisabled ? '#ccc' : isSelected ? 'black' : data.color,
-                // ? chroma.contrast(color, 'white') > 2
-                //     ? 'white'
-                //     : 'black'
-
-                cursor: isDisabled ? 'not-allowed' : 'default'
-
-                // ':active': {
-                //     ...styles[':active'],
-                //     backgroundColor: !isDisabled
-                //         ? isSelected
-                //             ? data.color
-                //             : color.alpha(0.3).css()
-                //         : undefined
-                // }
+                backgroundColor: isDisabled
+                    ? undefined
+                    : isSelected
+                    ? data.color
+                    : isFocused
+                    ? color.alpha(0.3).css()
+                    : undefined,
+                color: isDisabled
+                    ? '#ccc'
+                    : isSelected
+                    ? chroma.contrast(color, 'white') > 2
+                        ? 'white'
+                        : 'black'
+                    : data.color,
+                cursor: isDisabled ? 'not-allowed' : 'default',
+                ':active': {
+                    ...styles[':active'],
+                    backgroundColor: !isDisabled
+                        ? isSelected
+                            ? data.color
+                            : color.alpha(0.5).css()
+                        : undefined
+                }
             };
         },
         multiValue: (styles, { data }) => {
-            // const color = chroma(data.color);
+            const color = chroma(data.color);
             return {
                 ...styles,
-                backgroundColor: data.color // color.alpha(0.1).css()
+                backgroundColor: color.alpha(0.5).css()
             };
         },
         multiValueLabel: (styles, { data }) => {
+            const color = chroma(data.color);
             return {
                 ...styles,
-                color: 'white', // data.color
+                color: chroma.contrast(color, 'white') > 2 ? 'white' : 'black',
                 backgroundColor: data.color
             };
-        }
-        // multiValueRemove: (styles, { data }) => ({
-        //     ...styles,
-        //     color: data.color,
-        //     ':hover': {
-        //         backgroundColor: data.color,
-        //         color: 'white'
-        //     }
-        // })
+        },
+        multiValueRemove: (styles, { data }) => ({
+            ...styles,
+            color: data.color,
+            ':hover': {
+                backgroundColor: data.color,
+                color: 'white'
+            }
+        })
     };
 
     return (
