@@ -6,6 +6,7 @@ import SelectField from '../common/form/selectField';
 import RadioField from '../common/form/radioField';
 import MultiSelectField from '../common/form/multiSelectField';
 import CheckBoxField from '../common/form/checkBoxField';
+import { color } from '../../utils/color';
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -32,7 +33,7 @@ const RegisterForm = () => {
             const qualitiesList = Object.keys(data).map((optionName) => ({
                 value: data[optionName]._id,
                 label: data[optionName].name,
-                color: data[optionName].color
+                color: color(data[optionName].color)
             }));
             setQualities(qualitiesList);
         });
@@ -53,7 +54,7 @@ const RegisterForm = () => {
                     qualitiesArray.push({
                         _id: qualities[quality].value,
                         name: qualities[quality].label,
-                        color: qualities[quality].color
+                        color: color(qualities[quality].color)
                     });
                 }
             }
