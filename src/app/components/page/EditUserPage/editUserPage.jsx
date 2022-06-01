@@ -8,6 +8,7 @@ import RadioField from '../../common/form/radioField';
 import MultiSelectField from '../../common/form/multiSelectField';
 import Loader from '../../ui/loader/loader';
 import { color } from '../../../utils/color';
+import BackButton from '../../common/backButton';
 
 const EditUserPage = () => {
     const { userId } = useParams();
@@ -146,6 +147,7 @@ const EditUserPage = () => {
     if (data) {
         return (
             <div className="container m-5">
+                <BackButton />
                 <div className="row">
                     <div className="col-md-6 offset-md-3 shadow p-4">
                         {!isLoading && Object.keys(professions).length > 0 ? (
