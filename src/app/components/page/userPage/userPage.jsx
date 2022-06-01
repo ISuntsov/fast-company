@@ -16,9 +16,9 @@ const UserPage = ({ userId }) => {
 
     if (user) {
         return (
-            <div className="container m-5">
+            <div className="container">
                 <div className="row gutters-sm">
-                    <div className="col-md-6 offset-md-3 shadow p-4">
+                    <div className="col-md-4 mb-3">
                         <UserCard user={user} />
                         <QualitiesCard data={user.qualities} />
                         <MeetingsCard value={user.completedMeetings} />
