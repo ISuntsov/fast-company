@@ -14,10 +14,10 @@ const RegisterForm = () => {
         password: '',
         profession: '',
         sex: 'male',
-        qualities: [],
+        items: [],
         licence: false
     });
-    const [qualities, setQualities] = useState([]);
+    const [items, setQualities] = useState([]);
     const [professions, setProfession] = useState([]);
     const [errors, setErrors] = useState({});
 
@@ -29,7 +29,7 @@ const RegisterForm = () => {
             }));
             setProfession(professionsList);
         });
-        api.qualities.fetchAll().then((data) => {
+        api.items.fetchAll().then((data) => {
             const qualitiesList = Object.keys(data).map((optionName) => ({
                 value: data[optionName]._id,
                 label: data[optionName].name,
@@ -49,12 +49,12 @@ const RegisterForm = () => {
     const getQualities = (elements) => {
         const qualitiesArray = [];
         for (const elem of elements) {
-            for (const quality in qualities) {
-                if (elem.value === qualities[quality].value) {
+            for (const quality in items) {
+                if (elem.value === items[quality].value) {
                     qualitiesArray.push({
-                        _id: qualities[quality].value,
-                        name: qualities[quality].label,
-                        color: color(qualities[quality].color)
+                        _id: items[quality].value,
+                        name: items[quality].label,
+                        color: color(items[quality].color)
                     });
                 }
             }
@@ -122,11 +122,11 @@ const RegisterForm = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        const { profession, qualities } = data;
+        const { profession, items } = data;
         console.log({
             ...data,
             profession: getProfessionById(profession),
-            qualities: getQualities(qualities)
+            items: getQualities(items)
         });
     };
 
@@ -167,10 +167,10 @@ const RegisterForm = () => {
                 label="Выберите Ваш пол:"
             />
             <MultiSelectField
-                options={qualities}
+                options={items}
                 onChange={handleChange}
-                defaultValue={data.qualities}
-                name="qualities"
+                defaultValue={data.items}
+                name="items"
                 label="Выберите Ваши качества:"
             />
             <CheckBoxField
