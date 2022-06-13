@@ -20,11 +20,11 @@ const EditUserPage = () => {
         email: '',
         profession: '',
         sex: 'male',
-        items: []
+        qualities: []
     });
 
     const [professions, setProfession] = useState([]);
-    const [items, setQualities] = useState([]);
+    const [qualities, setQualities] = useState([]);
     const [errors, setErrors] = useState({});
 
     const getProfessionById = (id) => {
@@ -38,12 +38,12 @@ const EditUserPage = () => {
     const getQualities = (elements) => {
         const qualitiesArray = [];
         for (const elem of elements) {
-            for (const quality in items) {
-                if (elem.value === items[quality].value) {
+            for (const quality in qualities) {
+                if (elem.value === qualities[quality].value) {
                     qualitiesArray.push({
-                        _id: items[quality].value,
-                        name: items[quality].label,
-                        color: color(items[quality].color)
+                        _id: qualities[quality].value,
+                        name: qualities[quality].label
+                        // color: color(qualities[quality].color)
                     });
                 }
             }
@@ -55,12 +55,12 @@ const EditUserPage = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        const { profession, items } = data;
+        const { profession, qualities } = data;
         api.users
             .update(userId, {
                 ...data,
                 profession: getProfessionById(profession),
-                items: getQualities(items)
+                qualities: getQualities(qualities)
             })
             .then((data) => history.push(`/users/${data._id}`));
     };
@@ -68,18 +68,18 @@ const EditUserPage = () => {
     const transformData = (data) => {
         return data.map((qual) => ({
             label: qual.name,
-            value: qual._id,
-            color: color(qual.color)
+            value: qual._id
+            // color: color(qual.color)
         }));
     };
 
     useEffect(() => {
         setIsLoading(true);
-        api.users.getById(userId).then(({ profession, items, ...data }) =>
+        api.users.getById(userId).then(({ profession, qualities, ...data }) =>
             setData((prevState) => ({
                 ...prevState,
                 ...data,
-                items: transformData(items),
+                qualities: transformData(qualities),
                 profession: profession._id
             }))
         );
@@ -90,7 +90,7 @@ const EditUserPage = () => {
             }));
             setProfession(professionsList);
         });
-        api.items.fetchAll().then((data) => {
+        api.qualities.fetchAll().then((data) => {
             const qualitiesList = Object.keys(data).map((optionName) => ({
                 value: data[optionName]._id,
                 label: data[optionName].name,
@@ -186,10 +186,10 @@ const EditUserPage = () => {
                                     label="Выберите Ваш пол:"
                                 />
                                 <MultiSelectField
-                                    defaultValue={data.items}
-                                    options={items}
+                                    defaultValue={data.qualities}
+                                    options={qualities}
                                     onChange={handleChange}
-                                    name="items"
+                                    name="qualities"
                                     label="Выберите Ваши качества:"
                                 />
                                 <button

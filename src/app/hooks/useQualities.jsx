@@ -25,13 +25,13 @@ export const QualitiesProvider = ({ children }) => {
         }
     }, [error]);
 
+    function getQuality(id) {
+        return qualities.find((q) => q._id === id);
+    }
+
     function errorCatcher(error) {
         const { message } = error.response.data;
         setError(message);
-    }
-
-    function getQuality(id) {
-        return qualities.find((q) => q._id === id);
     }
 
     async function getQualities() {

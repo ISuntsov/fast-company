@@ -8,9 +8,7 @@ const Profession = ({ id }) => {
 
     if (!isLoading) {
         return <p>{prof.name}</p>;
-    }
-
-    return 'Loading...';
+    } else return 'Loading...';
 };
 Profession.propTypes = {
     id: PropTypes.string
