@@ -1,20 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import API from '../../../api';
-import SelectField from '../form/selectField';
 import TextAreaField from '../form/textAreaField';
 import { validator } from '../../../utils/validator';
 
-const initialData = { userId: '', content: '' };
-
 const AddCommentForm = ({ onSubmit }) => {
-    const [data, setData] = useState(initialData);
-    const [users, setUsers] = useState({});
+    const [data, setData] = useState({});
     const [errors, setErrors] = useState({});
-
-    useEffect(() => {
-        API.users.fetchAll().then(setUsers);
-    }, []);
 
     const handleChange = (target) => {
         setData((prevState) => ({
@@ -23,11 +14,6 @@ const AddCommentForm = ({ onSubmit }) => {
         }));
     };
     const validatorConfig = {
-        userId: {
-            isRequired: {
-                message: 'Выберите имя отправителя'
-            }
-        },
         content: {
             isRequired: {
                 message: 'Сообщение не может быть пустым'
@@ -42,7 +28,7 @@ const AddCommentForm = ({ onSubmit }) => {
     };
 
     const clearForm = () => {
-        setData(initialData);
+        setData({});
         setErrors({});
     };
 
@@ -54,26 +40,12 @@ const AddCommentForm = ({ onSubmit }) => {
         clearForm();
     };
 
-    const arrayOfUsers =
-        users &&
-        Object.keys(users).map((userId) => ({
-            label: users[userId].name,
-            value: users[userId]._id
-        }));
     return (
         <div>
             <h2>Новый комментарий</h2>
             <form onSubmit={handleSubmit}>
-                <SelectField
-                    onChange={handleChange}
-                    options={arrayOfUsers}
-                    name="userId"
-                    value={data.userId}
-                    defaultOption="Выберите пользователя"
-                    error={errors.userId}
-                />
                 <TextAreaField
-                    value={data.content}
+                    value={data.content || ''}
                     onChange={handleChange}
                     name="content"
                     label="Сообщение"

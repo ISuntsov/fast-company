@@ -23,7 +23,8 @@ module.exports = {
             'warn',
             'single',
             {
-                allowTemplateLiterals: true
+                allowTemplateLiterals: true,
+                avoidEscape: true
             }
         ],
         'no-trailing-spaces': [

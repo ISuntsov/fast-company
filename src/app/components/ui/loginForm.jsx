@@ -16,11 +16,14 @@ const LoginForm = () => {
         stayOn: false
     });
     const [errors, setErrors] = useState({});
+    const [enterError, setEnterError] = useState(null);
+
     const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
+        setEnterError(null);
     };
 
     // const validateScheme = yup.object().shape({
@@ -50,24 +53,11 @@ const LoginForm = () => {
         email: {
             isRequired: {
                 message: 'Электронная почта обязательная для заполнения'
-            },
-            isEmail: {
-                message: 'Электронная почта введена некорректно'
             }
         },
         password: {
             isRequired: {
                 message: 'Пароль обязателен для заполнения'
-            },
-            isCapitalSimbol: {
-                message: 'Пароль должен содержать хотя бы одну заглавную букву'
-            },
-            isDigit: {
-                message: 'Пароль должен содержать хотя бы одну цифру'
-            },
-            min: {
-                message: 'Пароль должен быть не короче 8 символов',
-                value: 8
             }
         }
     };
@@ -103,7 +93,7 @@ const LoginForm = () => {
                     : '/'
             );
         } catch (error) {
-            setErrors(error);
+            setEnterError(error.message);
         }
     };
 
@@ -130,9 +120,10 @@ const LoginForm = () => {
                 name="stayOn">
                 Оставаться в системе
             </CheckBoxField>
+            {enterError && <p className="text-danger">{enterError}</p>}
             <button
                 type="submit"
-                disabled={!isValid}
+                disabled={!isValid || enterError}
                 className="btn btn-primary w-100 mx-auto">
                 Отправить
             </button>
