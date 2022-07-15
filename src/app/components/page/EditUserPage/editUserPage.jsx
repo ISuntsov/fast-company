@@ -91,6 +91,7 @@ const EditUserPage = () => {
             for (const quality of qualities) {
                 if (quality._id === el) {
                     qualitiesArray.push(quality);
+                    break;
                 }
             }
         }
