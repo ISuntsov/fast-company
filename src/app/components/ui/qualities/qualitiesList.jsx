@@ -20,7 +20,7 @@ const QualitiesList = ({ qualities }) => {
 
     useEffect(() => {
         dispatch(loadQualitiesList());
-    });
+    }, []);
 
     return (
         <>

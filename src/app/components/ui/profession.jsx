@@ -21,7 +21,7 @@ const Profession = ({ id }) => {
 
     useEffect(() => {
         dispatch(loadProfessionsList());
-    });
+    }, []);
 
     return <p>{prof.name}</p>;
 };
