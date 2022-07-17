@@ -6,7 +6,7 @@ import SelectField from '../../common/form/selectField';
 import RadioField from '../../common/form/radioField';
 import MultiSelectField from '../../common/form/multiSelectField';
 import Loader from '../../ui/loader/loader';
-import { color } from '../../../utils/color';
+// import { color } from '../../../utils/color';
 import BackButton from '../../common/backButton';
 import { useProfession } from '../../../hooks/useProfession';
 import { useQualities } from '../../../hooks/useQualities';
@@ -37,8 +37,8 @@ const EditUserPage = () => {
     }));
     const qualitiesList = qualities.map((qualName) => ({
         label: qualName.name,
-        value: qualName._id,
-        color: color(qualName.color)
+        value: qualName._id
+        // color: color(qualName.color)
     }));
 
     // преобразование профессий и качеств c fake-api
@@ -85,22 +85,26 @@ const EditUserPage = () => {
         //     .then((data) => history.push(`/users/${data._id}`));
     };
 
-    const transformData = (qualArrayCurrentUser) => {
+    function getQualitiesListByIds(qualitiesIds) {
         const qualitiesArray = [];
-        for (const el of qualArrayCurrentUser) {
+        for (const qualId of qualitiesIds) {
             for (const quality of qualities) {
-                if (quality._id === el) {
+                if (quality._id === qualId) {
                     qualitiesArray.push(quality);
                     break;
                 }
             }
         }
+        return qualitiesArray;
+    }
 
-        return qualitiesArray.map((quality) => ({
-            label: quality.name,
-            value: quality._id,
-            color: color(quality.color)
+    const transformData = (data) => {
+        const result = getQualitiesListByIds(data).map((qual) => ({
+            label: qual.name,
+            value: qual._id
+            // color: color(quality.color)
         }));
+        return result;
     };
 
     // data.map((qual) => ({

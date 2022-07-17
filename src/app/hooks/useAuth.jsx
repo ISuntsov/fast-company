@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import userService from '../services/user.service';
-import { toast } from 'react-toastify';
 import localStorageServices, {
     setTokens
 } from '../services/localStorage.services';
