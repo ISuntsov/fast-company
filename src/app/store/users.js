@@ -64,15 +64,7 @@ const usersSlice = createSlice({
             state.error = null;
         },
         userUpdateSuccess: (state, action) => {
-            // state.entities[action.payload._id] = action.payload;
-            // state.entities = [
-            //     ...state.entities,
-            //     (state.entities[3] = action.payload)
-            // ];
-            console.log(
-                state.entities.find((u) => u._id === action.payload._id)
-            );
-            console.log(action.payload._id);
+            state.entities = action.payload;
         },
         userUpdateFailed: (state, action) => {
             state.error = action.payload;
@@ -170,18 +162,12 @@ export const updateCurrentUserParams =
         dispatch(userUpdateRequested());
         try {
             const { content } = await userService.updateCurrentUser(payload);
+            const newState = [...getState().users.entities].map((user) => {
+                if (user._id === content._id) return content;
+                return user;
+            });
 
-            // надо это как-то передать в entities
-            console.log(
-                getState().users.entities.find((u) => u._id === payload._id)
-            );
-            console.log(
-                getState().users.entities.findIndex(
-                    (u) => u._id === payload._id
-                )
-            );
-
-            dispatch(userUpdateSuccess(content));
+            dispatch(userUpdateSuccess(newState));
             history.push('/users');
         } catch (error) {
             dispatch(userUpdateFailed(error.message));
