@@ -6,16 +6,21 @@ import Loader from './loader/loader';
 // import { useComments } from '../../hooks/useComments';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    createComment,
     getComments,
     getCommentsLoadingStatus,
-    loadCommentsList
+    loadCommentsList,
+    removeComment
 } from '../../store/comments';
 import { useParams } from 'react-router-dom';
+import { nanoid } from 'nanoid';
+import { getCurrentUserId } from '../../store/users';
 
 const Comments = () => {
     const { userId } = useParams();
     const dispatch = useDispatch();
     const isLoading = useSelector(getCommentsLoadingStatus());
+    const currentUserId = useSelector(getCurrentUserId());
 
     useEffect(() => {
         dispatch(loadCommentsList(userId));
@@ -25,6 +30,15 @@ const Comments = () => {
     const comments = useSelector(getComments());
 
     const handleSubmit = (data) => {
+        dispatch(
+            createComment({
+                ...data,
+                created_at: Date.now(),
+                _id: nanoid(),
+                pageId: userId,
+                userId: currentUserId
+            })
+        );
         // createComment(data);
         // api.comments
         //     .add({ ...data, pageId: userId })
@@ -32,6 +46,7 @@ const Comments = () => {
     };
 
     const handleRemoveComment = (id) => {
+        dispatch(removeComment(id));
         // removeComment(id);
         // api.comments.remove(id).then((id) => {
         //     setComments(comments.filter((com) => com._id !== id));
