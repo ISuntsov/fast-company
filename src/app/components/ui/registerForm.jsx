@@ -5,17 +5,22 @@ import SelectField from '../common/form/selectField';
 import RadioField from '../common/form/radioField';
 import MultiSelectField from '../common/form/multiSelectField';
 import CheckBoxField from '../common/form/checkBoxField';
-import { useAuth } from '../../hooks/useAuth';
-import { useHistory } from 'react-router-dom';
 
 // import { useQualities } from '../../hooks/useQualities';
 // import { useProfession } from '../../hooks/useProfession';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getQualities } from '../../store/qualities';
 import { getProfessions } from '../../store/professions';
+import { signUp } from '../../store/users';
+
+// import { useAuth } from '../../hooks/useAuth';
+// import { useHistory } from 'react-router-dom';
 
 const RegisterForm = () => {
-    const history = useHistory();
+    const dispatch = useDispatch();
+    // const history = useHistory();
+    // const { signUp } = useAuth();
+
     const [data, setData] = useState({
         name: '',
         email: '',
@@ -25,8 +30,6 @@ const RegisterForm = () => {
         qualities: [],
         licence: false
     });
-
-    const { signUp } = useAuth();
 
     // const { qualities } = useQualities();
     const qualities = useSelector(getQualities());
@@ -97,7 +100,7 @@ const RegisterForm = () => {
             isRequired: {
                 message: 'Пароль обязателен для заполнения'
             },
-            isCapitalSimbol: {
+            isCapitalSymbol: {
                 message: 'Пароль должен содержать хотя бы одну заглавную букву'
             },
             isDigit: {
@@ -133,7 +136,7 @@ const RegisterForm = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
@@ -142,12 +145,13 @@ const RegisterForm = () => {
             qualities: data.qualities.map((q) => q.value)
         };
 
-        try {
-            await signUp(newData);
-            history.push('/');
-        } catch (error) {
-            setErrors(error);
-        }
+        dispatch(signUp(newData));
+        // try {
+        //     await signUp(newData);
+        //     history.push('/');
+        // } catch (error) {
+        //     setErrors(error);
+        // }
     };
 
     return (

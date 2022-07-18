@@ -3,12 +3,17 @@ import { validator } from '../../utils/validator';
 import TextField from '../common/form/textField';
 import CheckBoxField from '../common/form/checkBoxField';
 import { useHistory } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuthError, logIn } from '../../store/users';
+// import { useAuth } from '../../hooks/useAuth';
 // import * as yup from 'yup';
 
 const LoginForm = () => {
+    const dispatch = useDispatch();
     const history = useHistory();
-    const { logIn } = useAuth();
+
+    // const { logIn } = useAuth();
 
     const [data, setData] = useState({
         email: '',
@@ -16,14 +21,15 @@ const LoginForm = () => {
         stayOn: false
     });
     const [errors, setErrors] = useState({});
-    const [enterError, setEnterError] = useState(null);
+
+    const loginError = useSelector(getAuthError());
+    // const [enterError, setEnterError] = useState(null);
 
     const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
-        setEnterError(null);
     };
 
     // const validateScheme = yup.object().shape({
@@ -79,22 +85,27 @@ const LoginForm = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
 
-        try {
-            await logIn(data);
+        const redirect = history.location.state
+            ? history.location.state.from.pathname
+            : '/';
+        dispatch(logIn({ payload: data, redirect }));
 
-            history.push(
-                history.location.state
-                    ? history.location.state.from.pathname
-                    : '/'
-            );
-        } catch (error) {
-            setEnterError(error.message);
-        }
+        // try {
+        //     await logIn(data);
+        //
+        //     history.push(
+        //         history.location.state
+        //             ? history.location.state.from.pathname
+        //             : '/'
+        //     );
+        // } catch (error) {
+        //     setEnterError(error.message);
+        // }
     };
 
     return (
@@ -120,10 +131,10 @@ const LoginForm = () => {
                 name="stayOn">
                 Оставаться в системе
             </CheckBoxField>
-            {enterError && <p className="text-danger">{enterError}</p>}
+            {loginError && <p className="text-danger">{loginError}</p>}
             <button
                 type="submit"
-                disabled={!isValid || enterError}
+                disabled={!isValid}
                 className="btn btn-primary w-100 mx-auto">
                 Отправить
             </button>

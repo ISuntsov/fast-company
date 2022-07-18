@@ -5,12 +5,18 @@ import UserCard from '../../ui/userCard';
 import QualitiesCard from '../../ui/qualitiesCard';
 import MeetingsCard from '../../ui/meetingsCard';
 import Comments from '../../ui/comments';
-import { useUser } from '../../../hooks/useUsers';
-import { CommentsProvider } from '../../../hooks/useComments';
+
+// import { CommentsProvider } from '../../../hooks/useComments';
+
+// import { useUser } from '../../../hooks/useUsers';
+import { useSelector } from 'react-redux';
+import { getUserById } from '../../../store/users';
 
 const UserPage = ({ userId }) => {
-    const { getUserById } = useUser();
-    const user = getUserById(userId);
+    // const { getUserById } = useUser();
+    // const user = getUserById(userId);
+
+    const user = useSelector(getUserById(userId));
 
     if (user) {
         return (
@@ -22,9 +28,9 @@ const UserPage = ({ userId }) => {
                         <MeetingsCard value={user.completedMeetings} />
                     </div>
                     <div className="col-md-8">
-                        <CommentsProvider>
-                            <Comments />
-                        </CommentsProvider>
+                        {/* <CommentsProvider> */}
+                        <Comments />
+                        {/* </CommentsProvider> */}
                     </div>
                 </div>
             </div>

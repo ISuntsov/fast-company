@@ -7,11 +7,11 @@ import RadioField from '../../common/form/radioField';
 import MultiSelectField from '../../common/form/multiSelectField';
 import Loader from '../../ui/loader/loader';
 import BackButton from '../../common/backButton';
-import { useAuth } from '../../../hooks/useAuth';
 
+// import { useAuth } from '../../../hooks/useAuth';
 // import { useProfession } from '../../../hooks/useProfession';
 // import { useQualities } from '../../../hooks/useQualities';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     getQualities,
     getQualitiesLoadingStatus
@@ -20,12 +20,17 @@ import {
     getProfessions,
     getProfessionsLoadingStatus
 } from '../../../store/professions';
+import {
+    getCurrentUserData,
+    updateCurrentUserParams
+} from '../../../store/users';
 
 // import { color } from '../../../utils/color';
 // import api from '../../../api';
 
 const EditUserPage = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState({});
     const [errors, setErrors] = useState({});
@@ -38,7 +43,8 @@ const EditUserPage = () => {
     //     qualities: []
     // }
 
-    const { currentUser, updateUserData } = useAuth();
+    // const { currentUser, updateUserData } = useAuth();
+    const currentUser = useSelector(getCurrentUserData());
 
     const professions = useSelector(getProfessions());
     const profLoading = useSelector(getProfessionsLoadingStatus());
@@ -87,10 +93,17 @@ const EditUserPage = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        await updateUserData({
+        const newData = {
             ...data,
             qualities: data.qualities.map((quality) => quality.value)
-        });
+        };
+        dispatch(updateCurrentUserParams(newData));
+
+        // await updateUserData({
+        //     ...data,
+        //     qualities: data.qualities.map((quality) => quality.value)
+        // });
+
         history.push(`/users/${currentUser._id}`);
 
         // api.users

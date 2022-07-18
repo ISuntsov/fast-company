@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,26 +7,19 @@ import NavBar from './components/ui/navBar';
 import Main from './layouts/main';
 import Login from './layouts/login';
 import Users from './layouts/users';
-import AuthProvider from './hooks/useAuth';
 import ProtectedRoute from './components/common/protectedRoute';
 import LogOut from './layouts/logOut';
+import AppLoader from './components/ui/hoc/appLoader';
 
+// import AuthProvider from './hooks/useAuth';
 // import { ProfessionProvider } from './hooks/useProfession';
 // import { QualitiesProvider } from './hooks/useQualities';
-import { useDispatch } from 'react-redux';
-import { loadQualitiesList } from './store/qualities';
-import { loadProfessionsList } from './store/professions';
 
 function App() {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(loadQualitiesList());
-        dispatch(loadProfessionsList());
-    }, []);
-
     return (
         <>
-            <AuthProvider>
+            <AppLoader>
+                {/* <AuthProvider> */}
                 <NavBar />
                 {/* <QualitiesProvider> */}
                 {/* <ProfessionProvider> */}
@@ -42,7 +35,8 @@ function App() {
                 </Switch>
                 {/* </ProfessionProvider> */}
                 {/* </QualitiesProvider> */}
-            </AuthProvider>
+                {/* </AuthProvider> */}
+            </AppLoader>
             <ToastContainer />
         </>
     );
