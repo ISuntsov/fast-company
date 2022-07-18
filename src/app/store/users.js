@@ -6,7 +6,6 @@ import getRandomInt from '../utils/getRandomInt';
 import history from '../utils/history';
 import { generateAuthError } from '../utils/generateAuthError';
 
-// обновить пользователя в entities
 const initialState = localStorageServices.getAccessToken()
     ? {
           entities: null,
@@ -168,13 +167,13 @@ export const updateCurrentUserParams =
             });
 
             dispatch(userUpdateSuccess(newState));
-            history.push('/users');
+            history.push(`/users/${content._id}`);
         } catch (error) {
             dispatch(userUpdateFailed(error.message));
         }
     };
 
-export const loadUsersList = () => async (dispatch, getState) => {
+export const loadUsersList = () => async (dispatch) => {
     dispatch(usersRequested());
     try {
         const { content } = await userService.get();
