@@ -5,22 +5,14 @@ import SelectField from '../common/form/selectField';
 import RadioField from '../common/form/radioField';
 import MultiSelectField from '../common/form/multiSelectField';
 import CheckBoxField from '../common/form/checkBoxField';
-
-// import { useQualities } from '../../hooks/useQualities';
-// import { useProfession } from '../../hooks/useProfession';
 import { useDispatch, useSelector } from 'react-redux';
 import { getQualities } from '../../store/qualities';
 import { getProfessions } from '../../store/professions';
 import { signUp } from '../../store/users';
 
-// import { useAuth } from '../../hooks/useAuth';
-// import { useHistory } from 'react-router-dom';
-
 const RegisterForm = () => {
     const dispatch = useDispatch();
-    // const history = useHistory();
-    // const { signUp } = useAuth();
-
+    
     const [data, setData] = useState({
         name: '',
         email: '',
@@ -30,54 +22,29 @@ const RegisterForm = () => {
         qualities: [],
         licence: false
     });
-
-    // const { qualities } = useQualities();
+    
     const qualities = useSelector(getQualities());
-
+    
     const qualitiesList = qualities.map((q) => ({
         label: q.name,
         value: q._id
     }));
-
-    // const { professions } = useProfession();
+    
     const professions = useSelector(getProfessions());
     const professionsList = professions.map((p) => ({
         label: p.name,
         value: p._id
     }));
-
+    
     const [errors, setErrors] = useState({});
-
-    // const getProfessionById = (id) => {
-    //     for (const prof of professions) {
-    //         if (prof.value === id) {
-    //             return { _id: prof.value, name: prof.label };
-    //         }
-    //     }
-    // };
-    // const getQualities = (elements) => {
-    //     const qualitiesArray = [];
-    //     for (const elem of elements) {
-    //         for (const quality in qualities) {
-    //             if (elem.value === qualities[quality].value) {
-    //                 qualitiesArray.push({
-    //                     _id: qualities[quality].value,
-    //                     name: qualities[quality].label,
-    //                     color: color(qualities[quality].color)
-    //                 });
-    //             }
-    //         }
-    //     }
-    //     return qualitiesArray;
-    // };
-
+    
     const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
     };
-
+    
     const validatorConfig = {
         email: {
             isRequired: {
@@ -123,19 +90,19 @@ const RegisterForm = () => {
             }
         }
     };
-
+    
     useEffect(() => {
         validate();
     }, [data]);
-
+    
     const validate = () => {
         const errors = validator(data, validatorConfig);
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
-
+    
     const isValid = Object.keys(errors).length === 0;
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
@@ -144,16 +111,10 @@ const RegisterForm = () => {
             ...data,
             qualities: data.qualities.map((q) => q.value)
         };
-
+        
         dispatch(signUp(newData));
-        // try {
-        //     await signUp(newData);
-        //     history.push('/');
-        // } catch (error) {
-        //     setErrors(error);
-        // }
     };
-
+    
     return (
         <form onSubmit={handleSubmit}>
             <TextField

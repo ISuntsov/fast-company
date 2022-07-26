@@ -1,17 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-
-// import { useAuth } from '../../hooks/useAuth';
 import { useSelector } from 'react-redux';
 import { getCurrentUserId } from '../../store/users';
 
 const UserCard = ({ user }) => {
     const history = useHistory();
-
-    // const { currentUser } = useAuth();
+    
     const currentUserId = useSelector(getCurrentUserId());
-
+    
     const handleClick = () => {
         history.push(history.location.pathname + '/edit');
     };

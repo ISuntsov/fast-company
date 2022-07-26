@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Quality from './quality';
-
-// import { useQualities } from '../../../hooks/useQualities';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     getQualitiesByIds,
@@ -12,16 +10,15 @@ import {
 
 const QualitiesList = ({ qualities }) => {
     const dispatch = useDispatch();
-
-    // const { isLoading } = useQualities();
+    
     const isLoading = useSelector(getQualitiesLoadingStatus());
     if (isLoading) return 'Loading...';
     const qualitiesList = useSelector(getQualitiesByIds(qualities));
-
+    
     useEffect(() => {
         dispatch(loadQualitiesList());
     }, []);
-
+    
     return (
         <>
             {qualitiesList.map((qual) => (
